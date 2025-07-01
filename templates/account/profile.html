@@ -1,0 +1,45 @@
+{% extends "inner_base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="row">
+    <div class="12u">
+        <h2>My Account</h2>
+    </div>
+    <div class="12u">
+        <h4 style="font-weight: bold;">Welcome, <span style="color:darkgreen;">{{user}}</span></h4>
+                        <form method="post">
+                        {% csrf_token %}
+                         {% for field in user_form %}
+                            <div class="form-group">
+                             {{ field.label_tag }}
+                             {{ field|add_class:"form-control dark" }}
+                             {% if field.help_text %}
+                              <small style="color: grey">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                              <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                              </div>
+                        {% endfor %}
+
+                         {% for field in profile_form %}
+                            <div class="form-group">
+                             {{ field.label_tag }}
+                             {{ field|add_class:"form-control dark" }}
+                             {% if field.help_text %}
+                              <small style="color: grey">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                              <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                              </div>
+                        {% endfor %}
+
+                            <br/>
+                        <button type="submit" class="button">Submit</button>
+                    </form>
+    </div>
+</div>
+{% endblock %}
+

@@ -141,38 +141,73 @@ class FileDelete(DeleteView):
         return super().form_valid(form)
 
 # File download with decryption
+# class DownloadFile(TemplateView):
+#     template_name = 'cloudstorage/download_file_form.html'
+
+#     def post(self, request, *args, **kwargs):
+#         file_password = request.POST.get('file_password')
+#         file_id = kwargs.get('pk')
+#         upload_file = get_object_or_404(UploadFile, id=file_id, user=request.user)
+
+#         if file_password and len(file_password) == 16:
+#             encrypted_file_content = upload_file.encrypted_data
+#             key = file_password.encode('utf-8')
+#             backend = default_backend()
+#             cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
+#             decryptor = cipher.decryptor()
+#             decrypted_file_content = decryptor.update(encrypted_file_content) + decryptor.finalize()
+
+#             # Remove PKCS7 padding
+#             unpadder = padding.PKCS7(128).unpadder()
+#             try:
+#                 decrypted_file_content = unpadder.update(decrypted_file_content) + unpadder.finalize()
+#             except ValueError:
+#                 return render(request, self.template_name, {
+#                     'errors': "Invalid decryption key or corrupted file."
+#                 })
+
+#             response = HttpResponse(decrypted_file_content, content_type='application/octet-stream')
+#             response['Content-Disposition'] = f'attachment; filename="{upload_file.file_name_with_ext}"'
+#             return response
+#         else:
+#             return render(request, self.template_name, {
+#                 'errors': "Please provide a valid 16-character password."
+#             })
+
+#     def get(self, request, *args, **kwargs):
+#         return render(request, self.template_name)
 class DownloadFile(TemplateView):
     template_name = 'cloudstorage/download_file_form.html'
 
     def post(self, request, *args, **kwargs):
         file_password = request.POST.get('file_password')
         file_id = kwargs.get('pk')
-        upload_file = get_object_or_404(UploadFile, id=file_id, user=request.user)
+        upload_file = get_object_or_404(UploadFile, id=file_id)
 
-        if file_password and len(file_password) == 16:
-            encrypted_file_content = upload_file.encrypted_data
-            key = file_password.encode('utf-8')
-            backend = default_backend()
-            cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
-            decryptor = cipher.decryptor()
-            decrypted_file_content = decryptor.update(encrypted_file_content) + decryptor.finalize()
-
-            # Remove PKCS7 padding
-            unpadder = padding.PKCS7(128).unpadder()
-            try:
-                decrypted_file_content = unpadder.update(decrypted_file_content) + unpadder.finalize()
-            except ValueError:
-                return render(request, self.template_name, {
-                    'errors': "Invalid decryption key or corrupted file."
-                })
-
-            response = HttpResponse(decrypted_file_content, content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{upload_file.file_name_with_ext}"'
-            return response
-        else:
+        if not (file_password and len(file_password) == 16):
             return render(request, self.template_name, {
                 'errors': "Please provide a valid 16-character password."
             })
+
+        encrypted_file_content = upload_file.encrypted_data
+        key = file_password.encode('utf-8')
+        backend = default_backend()
+        cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
+        decryptor = cipher.decryptor()
+        try:
+            decrypted_file_content = decryptor.update(encrypted_file_content) + decryptor.finalize()
+            # Remove PKCS7 padding
+            unpadder = padding.PKCS7(128).unpadder()
+            decrypted_file_content = unpadder.update(decrypted_file_content) + unpadder.finalize()
+        except Exception:
+            # Decryption failed, wrong password
+            return render(request, self.template_name, {
+                'errors': "Incorrect password or file is corrupted."
+            })
+
+        response = HttpResponse(decrypted_file_content, content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{upload_file.file_name_with_ext}"'
+        return response
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
@@ -246,8 +281,8 @@ class TransferFileCreate(TemplateView):
                 activity="FileTransfer",
                 event_request=self.request
             )
-            if file_
-                return redirect('filetransfer-list')
+            # if file_:
+            #     return redirect('filetransfer-list')
         context = self.get_context_data(**kwargs)
         context['errors'] = "Invalid transfer data."
         return self.render_to_response(context)

@@ -1,0 +1,37 @@
+{% extends "inner_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="12u">
+        <h2>Activty Logs</h2>
+    </div>
+    <div class="12u">
+        <table>
+            <tr>
+                <td align="center"><strong>User</strong></td>
+                <td align="center"><strong>Activity Logs</strong></td>
+                <td align="center"><strong>Ip Address</strong></td>
+                <td align="center"><strong>Date Created</strong></td>
+                <td align="center"><strong>User Agent</strong></td>
+                <td align="center"><strong>Description</strong></td>
+            </tr>
+            {% for activity_log in object_list %}
+                <tr>
+                    <td align="center">{{ activity_log.user}}</td>
+                    <td align="center">{{ activity_log.activity_log}}</td>
+                    <td align="center">{{ activity_log.ip_address}}</td>
+                    <td align="center">{{ activity_log.date_created}}</td>
+                    <td align="center">{{ activity_log.user_agent}}</td>
+                    <td align="center">{{ activity_log.description}}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No activity log available.</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

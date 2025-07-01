@@ -1,0 +1,43 @@
+{% extends "inner_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="10u">
+        <h2>File List</h2>
+    </div>
+    <div class="2u">
+         <a href="/addfile/" class="button" style="float: right">Upload File</a>
+    </div>
+    <div class="12u" style="min-height:400px;">
+                <table>
+                    <tr>
+                        <td align="center"><strong>File&nbsp;Name</strong></td>
+                        <td align="center"><strong>Created</strong></td>
+                        <td align="center"><strong>Download</strong></td>
+                        <td align="center"><strong>Delete</strong></td>
+                    </tr>
+
+                    {% for files in object_list %}
+
+                        <tr>
+                            <td align="center">{{ files.file_name}}</td>
+                            <td align="center">{{ files.date_created}}</td>
+                            <td align="center">
+                                <a href="/downloadfile/{{ files.id }}" target="_blank" class="button" style="height: 34px;font-size: 12px;">Download File</a>
+                            </td>
+
+                            <td align="center"><a href="/deletefile/{{ files.id}}" class="button" style="height: 34px;font-size: 12px;background: firebrick;">Delete</a></td>
+                        </tr>
+
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">No file exits.</td>
+                        </tr>
+                    {% endfor %}
+
+                    </table>
+                </div>
+    </div>
+</div>
+{% endblock %}

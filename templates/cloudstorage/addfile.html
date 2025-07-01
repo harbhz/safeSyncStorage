@@ -1,0 +1,32 @@
+{% extends "inner_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="10u">
+        <h2>Upload File</h2>
+    </div>
+    <div class="2u">
+         <a href="/filelist/" class="button" style="float: right">Upload Files List</a>
+    </div>
+    <div class="12u" style="min-height:400px;">
+       <form method="post" action=""  enctype="multipart/form-data">
+           {% csrf_token %}
+           {{ form.as_p }}
+           <button type="submit" class="button">Submit</button>
+       </form>s
+    <script type="text/javascript">
+        function checkPasswordComplexity(pwd) {
+            var pwd = document.getElementById('id_file_password').value;
+            alert(pwd);
+            var letter = '/[a-zA-Z]/';
+            var number = '/[0-9]/';
+            var valid = number.test(pwd) && letter.test(pwd);
+            alert(valid);
+            return valid;
+        }
+    </script>
+        </div>
+    </div>
+</div>
+{% endblock %}

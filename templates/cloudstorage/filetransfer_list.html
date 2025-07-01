@@ -1,0 +1,45 @@
+{% extends "inner_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="10u">
+        <h2>Transfer File List</h2>
+    </div>
+    <div class="2u">
+         <a href="/filetransfer/" class="button" style="float: right">Transfer File</a>
+    </div>
+    <div class="12u">
+        <table>
+            <tr>
+                <td align="center"><strong>User</strong></td>
+                <td align="center"><strong>File Name</strong></td>
+                <td align="center"><strong>Remarks</strong></td>
+                <td align="center"><strong>Receiver User</strong></td>
+                <td align="center"><strong>Download</strong></td>
+                <td align="center"><strong>Date Created</strong></td>
+            </tr>
+            {% for transfer_file in object_list %}
+                <tr>
+                    <td align="center">{{ transfer_file.user}}</td>
+                    <td align="center">{{ transfer_file.file_name}}</td>
+                    <td align="center">{{ transfer_file.remarks}}</td>
+                    <td align="center">{{ transfer_file.receiver_user}}</td>
+<!--                    <td align="center">-->
+<!--                        <a href="/{{ transfer_file.file_name.file_path }}" target="_blank" class="button" style="height: 34px;font-size: 12px;">Download</a>-->
+<!--                    </td>-->
+                    <td align="center">
+                        <a href="/downloadfile/{{ transfer_file.file_name.id }}" target="_blank" class="button" style="height: 34px;font-size: 12px;">Download File</a>
+                    </td>
+                    <td align="center">{{ transfer_file.date_created}}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No transfer file available.</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path('chat/', views.ChatCreateListView.as_view(), name='chat'),
     path('deletechat/', views.delete_chat, name='deletechat'),
     path('', views.home, name='home'),
+    path('thanks/', TemplateView.as_view(template_name='thanks.html'), name='thanks'),
 ]

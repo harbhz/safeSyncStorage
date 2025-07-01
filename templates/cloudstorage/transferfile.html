@@ -1,0 +1,38 @@
+{% extends "inner_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="10u">
+        <h2>Transfer File</h2>
+    </div>
+    <div class="2u">
+         <a href="/filetransfer_list/" class="button" style="float: right">Transfer Files List</a>
+    </div>
+    <div class="12u" style="min-height:400px;">
+         <form method="post" action="" >
+               {% csrf_token %}
+             <p>
+                <label for="file_id">File Name:</label>
+                <select name="file_id" required="" id="file_id">
+                  <option value="" selected="">---------</option>
+                    {% for file_data in file_list %}
+                        <option value="{{file_data.id}}" >{{file_data.id}} - {{file_data.file_name}}</option>
+                    {% endfor %}
+
+                </select>
+              </p>
+              <p>
+                <label for="remarks">Remarks:</label>
+                <input type="text" name="remarks" maxlength="250" required="" id="remarks">
+              </p>
+             <p>
+                <label for="receiver_id">Receiver User ID:</label>
+                <input type="number" name="receiver_id" maxlength="250" required="" id="receiver_id" style="width:100%">
+              </p>
+               <button type="submit" class="button">Submit</button>
+           </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

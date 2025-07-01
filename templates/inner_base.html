@@ -14,17 +14,40 @@
 		<script src="{% static "js/skel.min.js" %}"></script>
 		<script src="{% static "js/skel-layers.min.js" %}"></script>
 		<script src="{% static "js/init.js" %}"></script>
-
+        <style type="text/css">
+            .left_menu_link {
+                text-decoration: none!important;
+            }
+            .left_menu_link:hover {
+                text-decoration: none!important;
+            }
+        </style>
 		<!--[if lte IE 8]><link rel="stylesheet" href="{% static "css/ie/v8.css" %}" /><![endif]-->
 	</head>
+
 	<body class="landing">
         {% include 'header.html' %}
-
-        {% block content %}
+        <section id="banner" style="height: 80px;padding-top:5px!important;">
+    </section>
+     <section id="one" class="wrapper style2">
+        <div class="container" style="min-height:400px;">
+            <div class="row">
+                <div class="3u">
+                     {% include 'left_menu.html' %}
+                </div>
+                <div class="9u">
+                    {% block content %}
         <!-- middel content -->
-        {% endblock %}
+                    {% endblock %}
+                </div>
+
+            </div>
+        </div>
+    </section>
 		<!-- Footer -->
         {% include 'footer.html' %}
-
 	</body>
 </html>
+
+
+
